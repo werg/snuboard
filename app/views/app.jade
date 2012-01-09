@@ -1,0 +1,29 @@
+!!! 5
+html(lang="en")
+	head
+		!= SocketStream
+		meta(charset="utf-8")
+		title snubrd
+	body
+		.topbar-wrapper
+			.topbar(data-dropdown="dropdown")
+				.topbar-inner
+					.container
+						h3
+							a(href='#') snuboard
+						ul.nav
+							li //- .active
+								a(href='#') Home
+							li
+								button#new-snute.btn.info.topbar-button new snute
+							
+							ul.nav.secondary-nav.pull-right.auth-buttons
+								li
+									a(href='#')#login-button Login
+								li
+									a(href='#')#register-button Register
+							ul.nav.secondary-nav.pull-right.logout-button.nodisplay
+								li
+									a#logout-button Logout
+		#zui
+			#viewport

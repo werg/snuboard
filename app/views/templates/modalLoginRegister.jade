@@ -1,0 +1,26 @@
+.modal.hide.fade
+	.modal-header
+		ul.pills
+			li#login-pill.active
+				a Login
+			li#register-pill
+				a Register
+	.modal-body
+		form
+			fieldset
+				.clearfix
+					label(for="comments") Username:
+					input#username(type="text")
+				.clearfix
+					label(for="comments") Password:
+					input#login-pwd(type="password")
+				.clearfix.register-fields.nodisplay
+					label(for="comments") Retype password:
+					input#repeat-pwd(type="password")
+				.clearfix.register-fields.nodisplay
+					label(for="comments") Email:
+					input#register-email(type="text")
+	.modal-footer
+		button.btn.cancel-button Cancel
+		button#auth-ok-button.btn.primary.login-button Login
+		
