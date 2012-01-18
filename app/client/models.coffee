@@ -42,27 +42,42 @@ exports.getCell = (cellX, cellY, zl, options) ->
 class exports.Snute extends Backbone.Model
 	initialize: ->
 		# how about caching this value?
-		@set {'maxScale': @getMaxScale()}
+		@set {'maxScale': @getMaxScale()}, {silent: true}
 		@view = new C.views.SnuteView {model: this}
 		C.app.snutes[@id] = this
 	
 	# we abuse the url attribute here to store something decidedly non-url, the type-name
 	url: 'snute'
 	
-	getMaxScale: =>
-		zl  = @get 'zl'
-		1 / Math.pow(2, zl)
+	#getMaxScale: =>
+	#	zl  = @get 'zl'
+	#	1 / Math.pow(2, zl)
 		
-	newMaxScale: =>
-		# figure out what a maxscale really is and
-		# whether 1 / height really is what we are aiming at!
-		# yeah pretty much
-		return 1 / SS.shared.util.calcHeight 0, SS.shared.util.globalSpeed, @onset, @karma
+	getMaxScale: =>
+		@zl = SS.shared.util.calcHeight(0, SS.shared.util.globalSpeed, @get('onset'), @get('karma'))
+		return 1 / Math.pow(2, @zl)
+		
+	getHeadCell: =>
+		z = Math.ceil(@zl)
+		pz =  Math.pow(2,z)
+		x = Math.extremify(@get('xpos') / pz)
+		y = Math.extremify(@get('ypos') / pz)
+		return C.app.cells[[x,y,z]]
+		
+	propUp: (prop) =>
+		@set {'karma': @attributes.karma + prop}, {silent: true}
+		@view.updateHeight()
+	
+
 
 class exports.MySnute extends SS.client.models.Snute
 	initialize: ->
-		@set {'maxScale': @getMaxScale()}
-		@set {published: false}, {silent: true}
+		@set {onset: $now(), karma: 1}, {silent: true}
+		@set(
+			maxScale: @getMaxScale()
+			published: false
+		, {silent: true})
+		
 		@save {},
 			success: (response) =>
 				C.app.snutes[@id] = this

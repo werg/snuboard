@@ -18,6 +18,8 @@ exports.setupHandlebars = ->
 	C.modals.LoginRegister.prototype.template = Handlebars.compile($('#templates-modalLoginRegister').html())
 
 class exports.SnuteView extends Backbone.View
+	# todo: add a button to prop up
+	# 	next think about linking!!!
 	initialize: ->
 		@model.view = this
 		@model.bind 'change', @render
@@ -32,13 +34,31 @@ class exports.SnuteView extends Backbone.View
 	setHeight: =>
 		# get that height / maxscale
 		# recalculate it with actual current scale
+		maxScale = @model.get 'maxScale'
+		console.log maxScale
+		scale = C.app.vp.scale
+		
 		if scale < maxScale
-			s = scale/ maxScale # ?
+			s = maxScale
 		else
 			s = scale
 		
-		$(@el).transform {matrix: [1.0/s, 0.0,0.0,1.0/scale,0.0,0.0]}
-
+		@rescale s
+	
+	updateHeight: =>
+		oldzl = @model.zl
+		# todo: the below is inefficient!! we only need oldhc if we actually are leaving it
+		oldhc = @model.getHeadCell()
+		@model.set {'maxScale': @model.getMaxScale()}, {silent: true}
+		@setHeight()
+		if Math.ceil(@model.zl) < Math.ceil(oldzl)
+			if oldhc?
+				oldhc.remove @model
+		else if Math.ceil(@model.zl) > Math.ceil(oldzl)
+			newhc = @model.getHeadCell()
+			if newhc?
+				newhc.add @model
+		
 	render: =>
 		if @el?
 			$(@el).remove()
@@ -46,21 +66,26 @@ class exports.SnuteView extends Backbone.View
 		@el = $(@template @model.toJSON())
 		@$('.snute-text').linkify()
 		# fixme: is this right?
-		@rescale C.app.vp.scale
+		@setHeight()
 		$('#viewport').append @el
+		@delegateEvents @events
 		return @el
 		
+	propUp: =>
+		@model.propUp 1
 		
-class exports.MySnuteView extends Backbone.View
+	events:
+	# todo: add a preventdefault to mousedown
+	# or rather, look for a minimal distance, minimal time mousemove event in zui panhandler
+		"click .propup-button": "propUp"
+		
+class exports.MySnuteView extends SS.client.views.SnuteView
 	initialize: ->
 		@model.view = this
 		@model.bind 'change', @render
 		@model.bind 'published', @render
 		#@template = Handlebars.compile($('#templates-snute').html())
 		@render()
-		
-	rescale: (scale) =>
-		$(@el).transform {matrix: [1.0/scale, 0.0,0.0,1.0/scale,0.0,0.0]}
 		
 	render: =>
 		if @el?
@@ -71,7 +96,7 @@ class exports.MySnuteView extends Backbone.View
 			@el.css {'background-color': "#FFF7BF"}
 			
 		@$('.snute-text').linkify()
-		@rescale C.app.vp.scale
+		@setHeight()
 		$('#viewport').append @el
 		@delegateEvents @events
 		return @el
@@ -79,6 +104,7 @@ class exports.MySnuteView extends Backbone.View
 	events:
 	# todo: add a preventdefault to mousedown
 	# or rather, look for a minimal distance, minimal time mousemove event in zui panhandler
+		"click .propup-button": "propUp"
 		"click .edit-button": "edit"
 		"click .delete-button": "del"
 		"click .publish-button": "publish"

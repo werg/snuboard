@@ -30,13 +30,20 @@ exports.init = ->
 	unless Backbone.history.start {pushState: true}
 		C.app.vp.center()
 	
+	# update the position hash repeatedly
 	updatePosHash = ->
 		if $now() - C.app.vp.lastMoved > 1000
 			C.app.route.saveCurrPos()
 		
-	# todo: update hash only when we're not currently moving!!
 	setInterval updatePosHash, 2000
 	
+	# update
+	updateHeights = ->
+		console.log 'updating height'
+		for key, snute of C.app.snutes
+			snute.view.updateHeight
+			
+	setInterval updateHeights, 1000
 	
 	SS.events.on 'newSnute', (msg, channel) ->
 		console.log "we recieved a new snute at: " + channel
