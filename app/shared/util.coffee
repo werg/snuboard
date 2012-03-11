@@ -36,8 +36,11 @@ exports.allContainingCells = (content) ->
 		
 	return cells
 
+# fixme: there's a global variable of same name in client-side app.coffee
+$now = Date.now or -> new Date().getTime()
+
 exports.calcHeight = (grandfPos, speed, grandfTime, newKarma) ->
 	now = $now()
 	return grandfPos - speed * (now - grandfTime) + newKarma
 
-exports.globalSpeed = 0.00005
+exports.globalSpeed = 0.000005
