@@ -1,7 +1,12 @@
 uuid = require('node-uuid')
 
 parseBool = (b) ->
-	b == 'true'
+	b is 'true'
+
+parseArray = (kind) ->
+	(a) ->
+		li = JSON.parse a
+		# todo: validate kind!!!
 
 protoSnute =
 	id: String
@@ -10,20 +15,23 @@ protoSnute =
 	text: String
 	xpos: Number
 	ypos: Number
-	zl: Number
+	karma: Number
+	onset: Number
+	headcell: parseArray(Number)
 	
 parseProto = (obj, proto) ->
 	for k, v of proto
 		if obj[k]?
 			obj[k] = v(obj[k])
 	return obj
+	# todo: exceptions??
 
 parseHgetall = (key, proto, cb) ->
 	R.hgetall key, (err, obj) ->
 		cb err, parseProto(obj, proto)
 		
 snuteGet = (id, cb) ->
-	parseHgetall 'snubrd:snute:' + id, protoSnute, cb
+	parseHgetall 'snubrd:' + id, protoSnute, cb
 
 getSnutes = (res, acc, cb) ->
 	if res.length > 0
@@ -34,7 +42,8 @@ getSnutes = (res, acc, cb) ->
 		cb acc
 
 storeSnute = (content, cb) ->
-	R.hmset "snubrd:snute:" + content.id, content, (err, res) ->
+	# todo: validate!!!
+	R.hmset "snubrd:" + content.id, content, (err, res) ->
 	# todo: check whether we have an error or a result
 	cb content
 
@@ -70,7 +79,7 @@ exports.actions =
 			#	* karma and
 			#		* authorization
 			#		* height
-			content.id = uuid.v4()
+			content.id = "snute:" + uuid.v4()
 			storeSnute content, cb
 			
 		update: storeSnute

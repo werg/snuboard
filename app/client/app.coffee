@@ -1,4 +1,5 @@
-# Client-side Code
+# Parameters for client-side code
+# fixme: set these universally from server
 CELLSIZEX = 1440
 CELLSIZEY = 1080
 
@@ -7,21 +8,25 @@ SNUTESIZEY = 30
 
 MARGINFACTOR = 0.75
 
-# fixme we have to make sure that all other files are loaded after app.coffee to make this globally visible:
 window.C = SS.client
 
 
-# Bind to socket events
-#SS.socket.on 'disconnect', ->  $('#message').text('SocketStream server is down :-(')
-#SS.socket.on 'reconnect', ->   $('#message').text('SocketStream server is up :-)')
+# objects that act as central repository for all 
+# snutes and cells currently loaded
 
+# snutes are indexed by their id
 exports.snutes = {}
+# cells are indexed by their position
+# so C.app.cells[[1,2,0]] is the cell at position (1,2,0)
 exports.cells = {}
 
-# This method is called automatically when the websocket connection is established. Do not rename/delete
+
+# This method is called automatically when the websocket connection is established.
+# Here we setup the router and some ui elements
 exports.init = ->
+	# fixme: there's a shaddowing variable in util.coffee
 	window.$now = Date.now or -> new Date().getTime()
-	window.$time = Date.now or -> new Date().getTime()
+	#window.$time = Date.now or -> new Date().getTime()
 	
 	C.app.vp = new C.viewport.Viewport(CELLSIZEX, CELLSIZEY)
 	C.views.setupHandlebars()
@@ -39,11 +44,11 @@ exports.init = ->
 	
 	# update
 	updateHeights = ->
-		console.log 'updating height'
+		#console.log 'updating height'
 		for key, snute of C.app.snutes
-			snute.view.updateHeight
+			snute.view.updateHeight()
 			
-	setInterval updateHeights, 1000
+	setInterval updateHeights, 10000
 	
 	SS.events.on 'newSnute', (msg, channel) ->
 		console.log "we recieved a new snute at: " + channel
@@ -54,7 +59,6 @@ exports.init = ->
 	$('#new-snute').click ->
 		[x, y] = C.app.calcNewVPPosition()
 		snute = new C.models.MySnute {xpos: x, ypos: y, zl: C.app.vp.zl, text: "A new snute has arisen!"}
-		
 		
 		
 	$('#login-button').click ->
