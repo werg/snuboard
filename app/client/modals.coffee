@@ -11,7 +11,7 @@ class exports.SnuteEdit extends Backbone.View
 		
 	events:
 		"click .ok-button": "save"
-		"click .cancel-button": "cancel"
+		"click .cancel-button": "hide"
 		"click .publish-button": "publish"
 	
 	save: =>
