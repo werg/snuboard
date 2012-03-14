@@ -184,7 +184,7 @@
 
 (defn rescale-item [item-sb-id now] "Reset all cells taking into account the item's new height."
   (let [item-id (sb-name2id item-sb-id)
-        globalspeed (redis-get-param "globalspeed")
+        globalspeed (redis-get-param "globalSpeed")
         curr-hc-coords (get-head-cell item-id now globalspeed)
         old-hc-coords  (item-get-prop item-id "headcell")]
           

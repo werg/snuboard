@@ -1,5 +1,5 @@
 class exports.Viewport extends Backbone.View
-	initialize: (@cellsizeX, @cellsizeY) ->
+	initialize: ->
 		
 		@zui = new ZUI53.Viewport document.getElementById('zui')
 		
@@ -40,7 +40,7 @@ class exports.Viewport extends Backbone.View
 	getCenterPos: =>
 		vpd = @getVPDims()
 		rescale  = 1/@scale
-		[rescale * (vpd.width/2 - @panX) / @cellsizeX, rescale * (vpd.height/2 - @panY) / @cellsizeY, @zl]
+		[rescale * (vpd.width/2 - @panX) / P.cellsizex, rescale * (vpd.height/2 - @panY) / P.cellsizey, @zl]
 	
 	setCenterPos: (xpos, ypos, zl) =>
 		unless zl?
@@ -48,8 +48,8 @@ class exports.Viewport extends Backbone.View
 		vpd = @getVPDims()
 		
 		scale = @calcScale zl
-		panX = vpd.width/2 - scale * xpos * @cellsizeX
-		panY = vpd.height/2 - scale * ypos * @cellsizeY
+		panX = vpd.width/2 - scale * xpos * P.cellsizex
+		panY = vpd.height/2 - scale * ypos * P.cellsizey
 		
 		@zui.panScaleTo panX, panY, scale
 	
@@ -70,10 +70,10 @@ class exports.Viewport extends Backbone.View
 		# todo check this whole rescale business!!!!!!!
 		
 		vpd = @getVPDims()
-		cellX1 = Math.extremify(rescale * -panX / @cellsizeX)
-		cellY1 = Math.extremify(rescale * -panY / @cellsizeY)
-		cellX2 =  Math.extremify(rescale * (vpd.width - panX) / @cellsizeX)
-		cellY2 =  Math.extremify(rescale * (vpd.height - panY) / @cellsizeY)
+		cellX1 = Math.extremify(rescale * -panX / P.cellsizex)
+		cellY1 = Math.extremify(rescale * -panY / P.cellsizey)
+		cellX2 =  Math.extremify(rescale * (vpd.width - panX) / P.cellsizex)
+		cellY2 =  Math.extremify(rescale * (vpd.height - panY) / P.cellsizey)
 		
 		C.models.getCellsFromRange cellX1, cellY1, cellX2, cellY2, Math.round(@zl), {createCell: true}
 		
@@ -81,10 +81,10 @@ class exports.Viewport extends Backbone.View
 		{width: $(window).width(), height: $(window).height()}
 		
 	calcPixelposX: (xpos) =>
-		@cellsizeX * xpos
+		P.cellsizex * xpos
 		
 	calcPixelposY: (ypos) =>
-		@cellsizeY * ypos
+		P.cellsizey * ypos
 		
 	calcScale: (zl) =>
 		1 / Math.pow(2, zl)

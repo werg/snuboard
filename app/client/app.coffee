@@ -1,14 +1,9 @@
 # Parameters for client-side code
 # fixme: set these universally from server
-CELLSIZEX = 1440
-CELLSIZEY = 1080
 
-SNUTESIZEX = 40
-SNUTESIZEY = 30
-
-MARGINFACTOR = 0.75
 
 window.C = SS.client
+window.P = SS.shared.params.values
 
 
 # objects that act as central repository for all 
@@ -20,6 +15,8 @@ exports.snutes = {}
 # so C.app.cells[[1,2,0]] is the cell at position (1,2,0)
 exports.cells = {}
 
+exports.mySnutes = {}
+
 
 # This method is called automatically when the websocket connection is established.
 # Here we setup the router and some ui elements
@@ -28,7 +25,7 @@ exports.init = ->
 	window.$now = Date.now or -> new Date().getTime()
 	#window.$time = Date.now or -> new Date().getTime()
 	
-	C.app.vp = new C.viewport.Viewport(CELLSIZEX, CELLSIZEY)
+	C.app.vp = new C.viewport.Viewport(P.cellsizex, P.cellsizey)
 	C.views.setupHandlebars()
 	C.app.route = new C.app.Router()
 	
@@ -37,10 +34,10 @@ exports.init = ->
 	
 	# update the position hash repeatedly
 	updatePosHash = ->
-		if $now() - C.app.vp.lastMoved > 1000
+		if $now() - C.app.vp.lastMoved > P.posHashDelay
 			C.app.route.saveCurrPos()
 		
-	setInterval updatePosHash, 2000
+	setInterval updatePosHash, P.posHashInterval
 	
 	# update
 	updateHeights = ->
@@ -48,7 +45,7 @@ exports.init = ->
 		for key, snute of C.app.snutes
 			snute.view.updateHeight()
 			
-	setInterval updateHeights, 10000
+	setInterval updateHeights, P.heightInterval
 	
 	SS.events.on 'newSnute', (msg, channel) ->
 		console.log "we recieved a new snute at: " + channel
@@ -105,16 +102,16 @@ exports.calcNewVPPosition =  ->
 	
 	# TODO TODO: check how we load current
 	
-	marginX = MARGINFACTOR * vpd.width 
-	marginY = MARGINFACTOR * vpd.height 
+	marginX = P.marginfactor * vpd.width 
+	marginY = P.marginfactor * vpd.height 
 	
 	rescale = 1/vp.scale
-	x1 = rescale * (-vp.panX  + marginX/2) / vp.cellsizeX
-	y1 = rescale * (-vp.panY + marginY/2) / vp.cellsizeY
+	x1 = rescale * (-vp.panX  + marginX/2) / P.cellsizex
+	y1 = rescale * (-vp.panY + marginY/2) / P.cellsizey
 	
 	
-	x = x1 +  rescale * (Math.random() * (vpd.width -  marginX) - SNUTESIZEX) / vp.cellsizeX
-	y = y1 +  rescale * (Math.random() * (vpd.height - marginY) - SNUTESIZEY) / vp.cellsizeY
+	x = x1 +  rescale * (Math.random() * (vpd.width -  marginX) - P.snutesizex) / P.cellsizex
+	y = y1 +  rescale * (Math.random() * (vpd.height - marginY) - P.snutesizey) / P.cellsizey
 	
 	return [x, y]
 

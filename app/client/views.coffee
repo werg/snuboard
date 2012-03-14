@@ -72,7 +72,7 @@ class exports.SnuteView extends Backbone.View
 		return @el
 		
 	propUp: =>
-		@model.propUp 1
+		@model.propUp P.propupValue
 		
 	events:
 	# todo: add a preventdefault to mousedown

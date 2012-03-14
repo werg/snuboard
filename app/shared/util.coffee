@@ -19,10 +19,10 @@ Math.sgn = (x) ->
 		0
 		
 
-ZOOMBACKOFF = 4
+ZOOMBACKOFF = 3
 
 exports.allContainingCells = (content) ->
-	zl = SS.shared.util.calcHeight(0, SS.shared.util.globalSpeed, content.onset, content.karma) + ZOOMBACKOFF
+	zl = SS.shared.util.calcHeight(0, SS.shared.params.values.globalSpeed, content.onset, content.karma) + ZOOMBACKOFF
 	xpos = content.xpos
 	ypos = content.ypos
 	cells = []
@@ -42,5 +42,3 @@ $now = Date.now or -> new Date().getTime()
 exports.calcHeight = (grandfPos, speed, grandfTime, newKarma) ->
 	now = $now()
 	return grandfPos - speed * (now - grandfTime) + newKarma
-
-exports.globalSpeed = 0.000005

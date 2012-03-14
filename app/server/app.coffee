@@ -14,3 +14,11 @@ exports.actions =
 
 	logout: (cb) ->
 		@session.user.logout(cb)                                        # disconnects pub/sub and returns a new Session object
+
+
+setParams2Redis = ->
+	console.log 'Setting params to Redis'
+	for k,v of SS.shared.params.values
+		R.set 'snubrd:param:' + k, v
+
+setParams2Redis()

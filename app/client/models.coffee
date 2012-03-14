@@ -54,7 +54,7 @@ class exports.Snute extends Backbone.Model
 	#	1 / Math.pow(2, zl)
 		
 	getMaxScale: =>
-		@zl = SS.shared.util.calcHeight(0, SS.shared.util.globalSpeed, @get('onset'), @get('karma'))
+		@zl = SS.shared.util.calcHeight(0, P.globalSpeed, @get('onset'), @get('karma'))
 		return 1 / Math.pow(2, @zl)
 		
 	getHeadCell: =>
@@ -81,6 +81,7 @@ class exports.MySnute extends SS.client.models.Snute
 		@save {},
 			success: (response) =>
 				C.app.snutes[@id] = this
+				C.app.mySnutes[@id] = this
 				cells = SS.shared.util.allContainingCells @toJSON()
 				for cell in cells
 					if C.app.cells[cell]?
@@ -130,6 +131,7 @@ class exports.Cell extends Backbone.Collection
 		snute.get 'maxScale'
 	
 	addUp: (snute, options) =>
+		# todo: i don't understand this!!
 		already = @get snute.id
 		if snute.id? and already
 			if snute.toJSON?
