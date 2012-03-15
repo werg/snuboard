@@ -3,7 +3,6 @@
 
 
 window.C = SS.client
-window.P = SS.shared.params.values
 
 
 # objects that act as central repository for all 
@@ -23,6 +22,7 @@ exports.mySnutes = {}
 exports.init = ->
 	# fixme: there's a shaddowing variable in util.coffee
 	window.$now = Date.now or -> new Date().getTime()
+	window.P = SS.shared.params.values
 	#window.$time = Date.now or -> new Date().getTime()
 	
 	C.app.vp = new C.viewport.Viewport(P.cellsizex, P.cellsizey)
@@ -50,7 +50,8 @@ exports.init = ->
 	SS.events.on 'newSnute', (msg, channel) ->
 		console.log "we recieved a new snute at: " + channel
 		[cell, x, y, z] = channel.split(':')
-		# to do: check whether we need to add it to its children too! yes we do!
+		# to do: check whether we need to add it to its children too!
+		# haven't we already fixed this??
 		C.app.cells[[x,y,z].join(',')].addUp msg
 	
 	$('#new-snute').click ->
