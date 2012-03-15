@@ -20,11 +20,17 @@ protoSnute =
 	headcell: parseArray(Number)
 	
 parseProto = (obj, proto) ->
+	obj1 = {}
 	for k, v of proto
 		if obj[k]?
-			obj[k] = v(obj[k])
-	return obj
+			obj1[k] = v(obj[k])
+	if obj1.length isnt obj.length
+		console.log "We have excess attributes:"
+		console.log obj
+		console.log obj1
+	return obj1
 	# todo: exceptions??
+	# todo: required fields?
 
 parseHgetall = (key, proto, cb) ->
 	R.hgetall key, (err, obj) ->
@@ -62,6 +68,9 @@ publishSnute = (content, cb) =>
 	
 	cellids = ('cell:' + cell.join(':') for cell in cells)
 	
+	# todo: this is rather inefficient because all obviously included
+	# child cells get notified as well
+	# a hierarchy of channels would be great here
 	SS.publish.channel cellids, 'newSnute', content
 	#for cell in cellids
 	#	SS.publish.broadcast cell, content 
