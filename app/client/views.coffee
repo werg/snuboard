@@ -92,8 +92,6 @@ class exports.MySnuteView extends SS.client.views.SnuteView
 			$(@el).remove()
 		#fixme: remove previously rendered
 		@el = $(@template @model.toJSON())
-		if @model.get('published') or @model.get('published') == 'true'
-			@el.css {'background-color': "#FFF7BF"}
 			
 		@$('.snute-text').linkify()
 		@setHeight()
@@ -113,11 +111,9 @@ class exports.MySnuteView extends SS.client.views.SnuteView
 		sev = new C.modals.SnuteEdit { model: @model }
 	
 	del: =>
-		# to do
-		alert "We still need to implement deleting snutes."
+		@el.remove()
+		@model.remove()
 		
 	publish: =>
 		@model.publish()
-	
-# mixin of SnuteView
-#_.default SS.client.views.MySnuteView.prototype, SS.client.views.SnuteView.prototype
+		@el.remove()

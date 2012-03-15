@@ -56,7 +56,7 @@ class exports.Snute extends Backbone.Model
 	getMaxScale: =>
 		@zl = SS.shared.util.calcHeight(0, P.globalSpeed, @get('onset'), @get('karma'))
 		return 1 / Math.pow(2, @zl)
-		
+		15
 	getHeadCell: =>
 		z = Math.ceil(@zl)
 		pz =  Math.pow(2,z)
@@ -67,12 +67,24 @@ class exports.Snute extends Backbone.Model
 	propUp: (prop) =>
 		@set {'karma': @attributes.karma + prop}, {silent: true}
 		@view.updateHeight()
-	
+
+	forAllContainingCells: (iterator) =>
+		cells = SS.shared.util.allContainingCells @toJSON()
+		for cell in cells
+			if C.app.cells[cell]?
+				iterator C.app.cells[cell]
+
+	remove: =>
+		@forAllContainingCells (cell) =>
+			cell.remove this
+		delete C.app.snutes[@id]
+		delete C.app.mySnutes[@id]	
 
 
 class exports.MySnute extends SS.client.models.Snute
 	initialize: ->
 		@set {onset: $now(), karma: 1}, {silent: true}
+		# todo: check whether we still need published as an attribute
 		@set(
 			maxScale: @getMaxScale()
 			published: false
@@ -83,14 +95,14 @@ class exports.MySnute extends SS.client.models.Snute
 				C.app.snutes[@id] = this
 				C.app.mySnutes[@id] = this
 				cells = SS.shared.util.allContainingCells @toJSON()
-				for cell in cells
-					if C.app.cells[cell]?
-						C.app.cells[cell].addUp @toJSON()
-				
+				@forAllContainingCells (cell) =>
+						cell.addUp @toJSON()
+
 				@view = new C.views.MySnuteView {model: this}
 		
 	publish: =>
 		@set {published: true}, {silent:true}
+		@remove()
 		SS.server.sync.snute.publish @id
 		@trigger 'published'
 		# todo, attach a callback that triggers an event, which switches the view
@@ -112,7 +124,14 @@ class exports.Cell extends Backbone.Collection
 		@options = options
 		@index = 0
 		console.log "Cell initialized"
-		console.log [@options.x, @options.y, @options.z]
+		sig = @getSig()
+		console.log sig
+		for id, snute of C.app.mySnutes
+			# contortions below necessary because [1,2,3] != [1,2,3]
+			containingCells = SS.shared.util.allContainingCells(snute.toJSON())
+			contains = __.any containingCells, (cellsig) -> __.isEqual(cellsig, sig)
+			if contains
+				@addUp snute
 	
 	getChildren: =>
 		if @options.z > 0
@@ -131,7 +150,6 @@ class exports.Cell extends Backbone.Collection
 		snute.get 'maxScale'
 	
 	addUp: (snute, options) =>
-		# todo: i don't understand this!!
 		already = @get snute.id
 		if snute.id? and already
 			if snute.toJSON?
@@ -139,7 +157,7 @@ class exports.Cell extends Backbone.Collection
 			else
 				already.set snute
 		else
-			@add snute
+			@add snute, options
 	
 	_prepareModel: (model, options) =>
 		if model.id?
