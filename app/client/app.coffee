@@ -56,7 +56,7 @@ exports.init = ->
 	
 	$('#new-snute').click ->
 		[x, y] = C.app.calcNewVPPosition()
-		snute = new C.models.MySnute {xpos: x, ypos: y, zl: C.app.vp.zl, text: "A new snute has arisen!"}
+		snute = new C.models.MySnute {xpos: x, ypos: y, text: "A new snute has arisen!"}
 		
 		
 	$('#login-button').click ->

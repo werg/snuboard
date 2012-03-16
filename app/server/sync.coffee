@@ -5,7 +5,10 @@ parseBool = (b) ->
 
 parseArray = (kind) ->
 	(a) ->
-		li = JSON.parse a
+		# this is really kinda ugly!
+		# redis returns '1,2,3' instead of '[1,2,3]'
+		li = JSON.parse '[' + a + ']'
+		return li
 		# todo: validate kind!!!
 
 protoSnute =
@@ -18,6 +21,22 @@ protoSnute =
 	karma: Number
 	onset: Number
 	headcell: parseArray(Number)
+
+validateSnute = (obj) ->
+	# for now just check we have the right attributes
+	# todo: validate types
+	if protoSnute.length isnt obj.length
+		console.log "Wrong number of attributes in validating snute"
+		console.log obj
+		return false
+	else
+		result = true
+		for k, v of protoSnute
+			result = result and obj[k]?
+		unless result
+			console.log "Wrong attributes"
+			console.log obj
+		return result
 	
 parseProto = (obj, proto) ->
 	obj1 = {}
@@ -48,10 +67,10 @@ getSnutes = (res, acc, cb) ->
 		cb acc
 
 storeSnute = (content, cb) ->
-	# todo: validate!!!
-	R.hmset "snubrd:" + content.id, content, (err, res) ->
-	# todo: check whether we have an error or a result
-	cb content
+	if validateSnute content
+		R.hmset "snubrd:" + content.id, content, (err, res) ->
+			# todo: check whether we have an error or a result
+			cb content
 
 cellsAddSnute = (cells, score, id, cb) ->
 	cell = cells.pop()

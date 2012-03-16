@@ -42,7 +42,8 @@ exports.getCell = (cellX, cellY, zl, options) ->
 class exports.Snute extends Backbone.Model
 	initialize: ->
 		# how about caching this value?
-		@set {'maxScale': @getMaxScale()}, {silent: true}
+		@set {'maxScale': @getMaxScale(), 'headcell': @getHeadCell()}, {silent: true}
+
 		@view = new C.views.SnuteView {model: this}
 		C.app.snutes[@id] = this
 	
@@ -56,13 +57,17 @@ class exports.Snute extends Backbone.Model
 	getMaxScale: =>
 		@zl = SS.shared.util.calcHeight(0, P.globalSpeed, @get('onset'), @get('karma'))
 		return 1 / Math.pow(2, @zl)
-		15
-	getHeadCell: =>
+	
+	getHeadCellSig: =>
 		z = Math.ceil(@zl)
 		pz =  Math.pow(2,z)
 		x = Math.extremify(@get('xpos') / pz)
 		y = Math.extremify(@get('ypos') / pz)
-		return C.app.cells[[x,y,z]]
+		return [x,y,z]
+
+
+	getHeadCell: =>
+		return C.app.cells[@getHeadCellSig()]
 		
 	propUp: (prop) =>
 		@set {'karma': @attributes.karma + prop}, {silent: true}
@@ -83,10 +88,14 @@ class exports.Snute extends Backbone.Model
 
 class exports.MySnute extends SS.client.models.Snute
 	initialize: ->
-		@set {onset: $now(), karma: 1}, {silent: true}
 		# todo: check whether we still need published as an attribute
 		@set(
+			onset: $now()
+			karma: 1
+		, {silent: true})
+		@set(
 			maxScale: @getMaxScale()
+			'headcell': @getHeadCellSig()
 			published: false
 		, {silent: true})
 		
