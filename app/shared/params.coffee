@@ -1,5 +1,5 @@
 exports.values = 
-	globalSpeed: 0.000005
+	globalSpeed: 0.00000005
 	zoombackoff: 3
 
 	cellsizex: 1440
