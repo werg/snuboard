@@ -149,7 +149,7 @@
   (redis/zrem db (cell-name cell-pos) item-id))
 
 (def param-schema "The schema according to which parameters from redis are parsed"{
-  "globalspeed" #(Float/parseFloat %)})
+  "globalSpeed" #(Float/parseFloat %)})
 
 (defn redis-get-param
   "Retrieve a parameter of param-name and parse via param-schema."

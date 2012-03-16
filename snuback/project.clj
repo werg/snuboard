@@ -4,6 +4,7 @@
   	[org.clojure/clojure "1.3.0"]
   	[clj-redis "0.0.12"]
   	[clj-time "0.3.1"]]
+  :main snuback.core
   :dev-dependencies
     [[lein-midje "1.0.7"]
      [midje "1.3.0"]])
