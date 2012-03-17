@@ -14,3 +14,6 @@ exports.values =
 	heightInterval: 10000
 
 	propupValue: 1
+
+if GLOBAL?
+	GLOBAL.P = exports.values
