@@ -33,6 +33,12 @@ See the [Readme](snuback/Readme.md) file in the backend folder `snuback/`.
 
 ## Development
 
+### Process
+
+Use the ticket system on [Trello](https://trello.com/board/snuboard/4f5bb132072fddb81e514571).
+Each ticket is marked with color-labels for its type (bug, chore, feature) or its projected size (small, big, huge).
+
+
 ### Important quirks
 
 #### Modifications and reloading
