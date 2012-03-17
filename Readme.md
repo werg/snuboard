@@ -27,6 +27,10 @@ You should find the page at [0.0.0.0:3000](http://0.0.0.0:3000)
 
 See the [Readme](snuback/Readme.md) file in the backend folder `snuback/`.
 
+### To Do
+
+[node_hash](https://github.com/Marak/node_hash) and [node-uuid](https://github.com/broofa/node-uuid) were installed locally to the `node_modules` subfolder via `npm install node_hash` etc. In case this doesn't create problems with different people's node setups, it can stay that way and is useful for deployment, otherwise make a requirement.
+
 ## Development
 
 ### Important quirks
@@ -45,7 +49,3 @@ If you change client-side `*.coffee` files you can simply reload the web-browser
 * Run `socketstream debug start`.
 * Start node-inspector. Make sure to start it with `node-inspector &` (the backgrounding '&' is essential, don't ask me why)
 * You'll find your code at (http://0.0.0.0:8080/debug?port=5858)
-
-### To Do
-
-[node_hash](https://github.com/Marak/node_hash) and [node-uuid](https://github.com/broofa/node-uuid) were installed locally to the `node_modules` subfolder via `npm install node_hash` etc. In case this doesn't create problems with different people's node setups, it can stay that way and is useful for deployment, otherwise make a requirement.
