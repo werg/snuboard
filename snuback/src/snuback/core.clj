@@ -205,7 +205,7 @@
         ; check whether we are below 0
         (if (> 0 newz)
           ; remove item from redis
-          (redis/del item-sb-id)))
+          (redis/del [item-sb-id])))
 
         ; now update our item from newz till the end
         (add-item2range item-id (inc newz) (getZL item-id now globalspeed)))))

@@ -29,9 +29,9 @@
   (against-background 
 
     [(before :contents 
-        (let [item  {"onset" "0"    "karma" "100.0"
+        (let [item  {"onset" "0"    "karma" "50.0"
                      "xpos" "3.2"   "ypos" "3.3"
-                     "headcell" "[1,1,60]"}]
+                     "headcell" "[1,1,10]"}]
           (redis/hmset db (sb-name id) item))
 
       :after
@@ -42,10 +42,10 @@
 
     (facts "about getting item properties"
       (item-get-prop id "onset") => 0
-      (item-get-prop id "karma") => 100.0
+      (item-get-prop id "karma") => 50.0
       (item-get-prop id "xpos") => 3.2
       (item-get-prop id "ypos") => 3.3
-      (item-get-prop id "headcell") => '(1 1 60))
+      (item-get-prop id "headcell") => '(1 1 10))
 
     (fact "about setting item properties"
       (item-get-prop id "xpos") => 3.7
@@ -60,7 +60,7 @@
         (cell-remove-item coords id) => pos-non-zero
         (redis/zrank db (cell-name coords) id) => nil)
 
-        (add-item2range id 5 0 60) => nil
+        (add-item2range id 5 0 10) => nil
          
         ; fixme check whether it's there  
         ;(map
@@ -73,8 +73,8 @@
 
     (facts "about calculating height and zoomlevel"
       ; [now grandfPos speed grandfTime newKarma]
-      (calcHeight 100 30 0.4 0 70) => (roughly 60)
-      (getZL id 100 0.4) => (roughly 60))
+      (calcHeight 100 30 0.4 0 20) => (roughly 10)
+      (getZL id 100 0.4) => (roughly 10))
 
     (facts "about cells and position"
       (extremify 4.1) => (roughly 5)
@@ -85,8 +85,8 @@
       (get-cell-pos 2 4.1 -4.1) => [2 -2 2]
 
       (get-cell id 0) => [4 4 0]
-      (get-head-cell id 100 0.4) => '(1 1 60))
+      (get-head-cell id 100 0.4) => '(1 1 10))
 
     (facts "about rescaling items"
-      (rescale-item (sb-name "snute:foo") 100) => nil
-      )))
+      (rescale-item (sb-name id) 100) => nil
+    )))
