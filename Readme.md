@@ -7,8 +7,6 @@
 * [Node.js](http://nodejs.org)
 * [socketstream v0.2](https://github.com/socketstream/socketstream/tree/0.2) `npm install -g socketstream` should do it for now, until version 0.3 gets pushed to npm as default
 * [node-inspector](https://github.com/dannycoates/node-inspector) 
-* [node_hash](https://github.com/Marak/node_hash) can be installed locally too `npm install node_hash`
-* [node-uuid](https://github.com/broofa/node-uuid) `npm install node-uuid`
 * Make sure [Redis](http://redis.io) version 2.4 or higher is installed, not quite sure but some node packages might already install it for you. Start the client `redis-cli` and at the prompt enter `info` to see whether you have it running and what version.
 * [Clojure](http://clojure.org), probably install it via [Leiningen](https://github.com/technomancy/leiningen), since you'll need it anyway
 
@@ -47,3 +45,7 @@ If you change client-side `*.coffee` files you can simply reload the web-browser
 * Run `socketstream debug start`.
 * Start node-inspector. Make sure to start it with `node-inspector &` (the backgrounding '&' is essential, don't ask me why)
 * You'll find your code at (http://0.0.0.0:8080/debug?port=5858)
+
+### To Do
+
+[node_hash](https://github.com/Marak/node_hash) and [node-uuid](https://github.com/broofa/node-uuid) were installed locally to the `node_modules` subfolder via `npm install node_hash` etc. In case this doesn't create problems with different people's node setups, it can stay that way and is useful for deployment, otherwise make a requirement.
