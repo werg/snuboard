@@ -27,7 +27,19 @@ You should find the page at [0.0.0.0:3000](http://0.0.0.0:3000)
 
 #### Clojure backend
 
-See the [Readme](snuback/Readme.md) file in the backend folder snuback.
+See the [Readme](snuback/Readme.md) file in the backend folder `snuback/`.
+
+## Development
+
+### Important quirks
+
+#### Modifications and reloading
+
+While using SS 0.2.x, if you update/change anything in `lib/` (at least for client side) you will have to manually remove precompiled contents from the `public/assets/` folder in order to have it included upon page-load
+
+    rm public/assets/*
+
+If you change client-side `*.coffee` files you can simply reload the web-browser for changes to take effect. This does not (yet) work for server-side code.
 
 ### Debugging
 
