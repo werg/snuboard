@@ -138,7 +138,7 @@ class exports.Cell extends Backbone.Collection
 		for id, snute of C.app.mySnutes
 			# contortions below necessary because [1,2,3] != [1,2,3]
 			containingCells = SS.shared.util.allContainingCells(snute.toJSON())
-			contains = __.any containingCells, (cellsig) -> __.isEqual(cellsig, sig)
+			contains = _.any containingCells, (cellsig) -> _.isEqual(cellsig, sig)
 			if contains
 				@addUp snute
 	
