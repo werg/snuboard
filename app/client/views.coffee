@@ -51,12 +51,12 @@ class exports.SnuteView extends Backbone.View
 		oldhc = @model.getHeadCell()
 		@model.set {'maxScale': @model.getMaxScale()}, {silent: true}
 		@setHeight()
-		if Math.ceil(@model.zl) < Math.ceil(oldzl)
+		if Math.extremify(@model.zl) < Math.extremify(oldzl)
 			if oldhc?
 				oldhc.remove @model
-		else if Math.ceil(@model.zl) > Math.ceil(oldzl)
+		else if Math.extremify(@model.zl) > Math.extremify(oldzl)
 			newhc = @model.getHeadCell()
-			if newhc?
+			if newhc? and not newc.get(@model.id)?
 				newhc.add @model
 		
 	render: =>
