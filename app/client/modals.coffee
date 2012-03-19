@@ -22,7 +22,7 @@ class exports.SnuteEdit extends Backbone.View
 	publish: =>
 		@save()
 		@model.publish()
-	
+
 	hide: =>
 		@el.modal 'hide'
 		@el.remove()

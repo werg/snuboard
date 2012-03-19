@@ -111,8 +111,9 @@ class exports.MySnute extends SS.client.models.Snute
 		
 	publish: =>
 		@set {published: true}, {silent:true}
-		@remove()
+		@view.el.remove()
 		SS.server.sync.snute.publish @id
+		@remove()
 		@trigger 'published'
 		# todo, attach a callback that triggers an event, which switches the view
 	

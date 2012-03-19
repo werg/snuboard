@@ -83,7 +83,7 @@ class exports.MySnuteView extends SS.client.views.SnuteView
 	initialize: ->
 		@model.view = this
 		@model.bind 'change', @render
-		@model.bind 'published', @render
+		#@model.bind 'published', @render
 		#@template = Handlebars.compile($('#templates-snute').html())
 		@render()
 		
@@ -116,4 +116,3 @@ class exports.MySnuteView extends SS.client.views.SnuteView
 		
 	publish: =>
 		@model.publish()
-		@el.remove()
