@@ -1,0 +1,84 @@
+<html>
+<head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/raphael-min.js"></script>
+    <script type="text/javascript" src="js/raphael.pan-zoom.min.js"></script>
+    <style>
+        body {
+            margin: 0px;
+        }
+        #top_canvas {
+            width: 100%
+            height: 100%;
+            border: 1px solid #aaa;
+            margin: auto;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var map = "  ##  ##            #######       ##################   ### ##########      ######   #         #########    ###################   #####               # ##  # ##                ###   #####################  ###  ######        #     ######       #####        ##########   ########  ## ############          ######      #########     ########     ########     ############   ##                         ##    # ######    #########    #############   ##            ####### #   #####     #####   ###########   ############    ##      ###############   #####       ##          #####   #####       #   ###    ################  ########  ##         ##         ####   ########  ##     ################  ## #####         ########       #### ##########  ##      #############    ##        ###   ###########     #### ###########    #   ###############  ##   ####  ##  #############     ###  ###########  ###   #############        ######### ########    #          ###########   ###  ##############       #########  #######  ######        #########     ###  ##############  #############  ######          #    ##     #        ## #  #########       ########## ## ######     #    ###    ##  ####  # ##   ####           ###  ##########    #####     ##    ###     ##  ###  # ###  ####   ###########  #########     ####    ###    ###       #       ####   ####           # #  ########     #####    ###    #   ##########    ###         # ########              ##########  ####  #     ##########    ###        ##########        #     ########### ####  ###   ############   ###   ##   ########   ####  ###  ############# ####  # #  #############  ####   ##   ######## ######  ####   ##     ###        ###  #############  #####  ##  #########   ####  #####                         #############  #####  ##  #########   ####  ##### ### ###     ##   #####  ############   #####  ### #########         # # #####  ##   ###    ####   ############   #####  ###  #########   ####     ### ####  #####   #####  ##############  ##### ## #  #################  ####  # #  #####   ## ###  ############## ### #   ###  #############       ###  ###          ## ###  ############## ####     ##                                         #####     ########           "
+
+        Raphael.fn.hexagon = function(pos) {
+          pos = $.extend({x:0, y:0, r:5}, pos)
+          var path = ""
+          for (var i = 0; i <= 6; i++) {
+            var a = i * 60,
+                x = pos.x + pos.r * Math.cos(a * Math.PI / 180),
+                y = pos.y + pos.r * Math.sin(a * Math.PI / 180)
+            path += (i == 0 ? "M" : "L") + x + "," + y
+          }
+          path += "Z"
+          return this.path(path)
+        }
+
+        var config = {
+            map_width: 75,
+            tile_radius: 5,
+            tile_width: 10,
+            tile_height: 5*Math.sqrt(3)
+        }
+
+        coord_to_px = function(x, y) {
+            var result = {
+                x: config.tile_width * .75 * x,
+                y: config.tile_height * (x % 2 == 0 ? y : (y+.5))
+            }
+            
+            return result
+        }
+
+        $(document).ready(function() {
+            var paper = new Raphael(document.getElementById('top_canvas'), $(document).width(),$(document).height());
+
+    var panZoom = paper.panzoom({ 
+        initialZoom: 6, 
+        initialPosition: { x: 120, y: 70},
+        maxZoom: 9,
+        minZoom: 0,
+        zoomStep: .107
+    });
+    var isHandling = false;
+    
+    panZoom.enable();
+    paper.safari();
+
+
+            for (tile = 0; tile < map.length; tile++) {
+                if (map[tile] == "#") {
+                    var py = Math.floor(tile / config.map_width);
+                    var px = tile % config.map_width;
+                    hex = paper.hexagon(coord_to_px(px, py))
+                    hex.attr({
+                        stroke: "#ffffff",
+                        fill: "#bad83f"
+                    });
+                }
+            }
+        })
+
+    </script>
+</head>
+<body>
+    <div id="top_canvas"></div>
+</body>
+</html>
