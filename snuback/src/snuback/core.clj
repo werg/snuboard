@@ -4,7 +4,7 @@
     [clojure.string :as cljstr]
     [clj-time.core]
     [clj-time.coerce]
-    [clojure.contrib.math :as math]))
+    [clojure.contrib.generic.math-functions :as math]))
 
 (def db (redis/init))
 
@@ -97,10 +97,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Zoomlevel and positioning in cells
 
+(def log2base (math/log 2.0))
+
+(defn log2 [x] (/ (math/log x) log2base))
+
+(defn exp2 [x] (math/exp (* x log2base)))
+
 (defn calcHeight
   "Calculates the height/zoomlevel of an item, given all relevant parameters."
   [now grandfPos speed grandfTime newKarma]
-  (- (+ newKarma grandfPos) (* speed (- now grandfTime))))
+  (log2 (- (+ newKarma grandfPos) (* speed (- now grandfTime)))))
 
 (defn getZL
   "Calculates the height/zoomlevel of an item, from the redis representation."
@@ -119,7 +125,7 @@
 (defn get-cell-pos 
   "For an xpos and ypos, determine the corresponding cell coordinates at zoomlevel z."
   [z xpos ypos]
-  (let [pz (math/expt 2 z)
+  (let [pz (exp2 z)
         x  (extremify (/ xpos pz))
         y  (extremify (/ ypos pz))]
   [x y z]))
