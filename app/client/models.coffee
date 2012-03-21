@@ -19,7 +19,7 @@ exports.getCellsFromRange = (cellX1, cellY1, cellX2, cellY2, zl, options) ->
 	# 0 is not a valid cell index
 	for cellY in _.without [cellY1 .. cellY2], 0
 		for cellX in _.without [cellX1 .. cellX2], 0
-			cell = C.models.getCell cellX, cellY, zl, options
+			cell = C.models.getCell cellX, cellY, zl, _.clone(options) # Backbone pollutes the options
 			if cell?
 				result.push cell
 	return result
@@ -31,10 +31,10 @@ exports.getCell = (cellX, cellY, zl, options) ->
 	else if options.createCell
 		cell = C.app.cells[[cellX, cellY, zl]] = new C.models.Cell [], {x:cellX, y:cellY, z:zl}
 		success = options.success
-		options.success = (c, resp, xhr)=>
-			c.rescale(C.app.vp.scale)
+		options.success = ->
+			cell.rescale(C.app.vp.scale)
 			if success
-				success(c, resp, xhr)
+				success(cell)
 		cell.fetch options
 		return cell
 
