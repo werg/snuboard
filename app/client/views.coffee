@@ -35,7 +35,7 @@ class exports.SnuteView extends Backbone.View
 		# get that height / maxscale
 		# recalculate it with actual current scale
 		maxScale = @model.get 'maxScale'
-		console.log maxScale
+		#console.log maxScale
 		scale = C.app.vp.scale
 		
 		if scale < maxScale
@@ -65,6 +65,7 @@ class exports.SnuteView extends Backbone.View
 		#fixme: remove previously rendered
 		@el = $(@template @model.toJSON())
 		@$('.snute-text').linkify()
+		@$('a').embedly({maxWidth:400,'method':'afterParent'})
 		# fixme: is this right?
 		@setHeight()
 		$('#viewport').append @el
@@ -94,6 +95,7 @@ class exports.MySnuteView extends SS.client.views.SnuteView
 		@el = $(@template @model.toJSON())
 			
 		@$('.snute-text').linkify()
+		@$('a').embedly({maxWidth:200,'method':'afterParent'})
 		@setHeight()
 		$('#viewport').append @el
 		@delegateEvents @events

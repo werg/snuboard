@@ -20,6 +20,8 @@ exports.mySnutes = {}
 # This method is called automatically when the websocket connection is established.
 # Here we setup the router and some ui elements
 exports.init = ->
+	$.embedly.defaults['key'] = '8d38eb9edef311e08dda4040d3dc5c07'
+
 	# fixme: there's a shaddowing variable in util.coffee
 	window.$now = Date.now or -> new Date().getTime()
 	window.P = SS.shared.params.values
