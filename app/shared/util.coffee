@@ -41,4 +41,5 @@ $now = Date.now or -> new Date().getTime()
 
 exports.calcHeight = (grandfPos, speed, grandfTime, newKarma) ->
 	now = $now()
-	return Math.log2(grandfPos - speed * (now - grandfTime) + newKarma)
+	pos = grandfPos - speed * (now - grandfTime) + newKarma
+	return Math.sgn(pos) * Math.log2(Math.abs(pos))

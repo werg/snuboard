@@ -106,7 +106,8 @@
 (defn calcHeight
   "Calculates the height/zoomlevel of an item, given all relevant parameters."
   [now grandfPos speed grandfTime newKarma]
-  (log2 (- (+ newKarma grandfPos) (* speed (- now grandfTime)))))
+  (let [pos (- (+ newKarma grandfPos) (* speed (- now grandfTime)))]
+    (* (math/sgn pos) (math/abs (log2 pos)))))
 
 (defn getZL
   "Calculates the height/zoomlevel of an item, from the redis representation."
