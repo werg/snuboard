@@ -55,7 +55,7 @@ class exports.Snute extends Backbone.Model
 	#	1 / Math.pow(2, zl)
 		
 	getMaxScale: =>
-		@zl = SS.shared.util.calcHeight(0, P.globalSpeed, @get('onset'), @get('karma'))
+		@zl = SS.shared.util.calcHeight(1, P.globalSpeed, @get('onset'), @get('karma'))
 		return 1 / Math.pow(2, @zl)
 	
 	getHeadCellSig: =>

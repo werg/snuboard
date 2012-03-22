@@ -112,7 +112,7 @@
 (defn getZL
   "Calculates the height/zoomlevel of an item, from the redis representation."
   [id now globalspeed]
-  (calcHeight now 0.0 globalspeed (item-get-prop id "onset") (item-get-prop id "karma" )))
+  (calcHeight now 1.0 globalspeed (item-get-prop id "onset") (item-get-prop id "karma" )))
 
 (defn extremify
   "Helper function that maps a float to the closest integer with a greater distance to 0."

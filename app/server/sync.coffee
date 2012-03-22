@@ -82,7 +82,7 @@ cellsAddSnute = (cells, score, id, cb) ->
 
 publishSnute = (content, cb) =>
 	
-	h = SS.shared.util.calcHeight(0, P.globalSpeed, content.onset, content.karma)
+	h = SS.shared.util.calcHeight(1, P.globalSpeed, content.onset, content.karma)
 	zl = Math.ceil h
 	
 	cells = SS.shared.util.allContainingCells(content)

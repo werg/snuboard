@@ -74,7 +74,7 @@
     (facts "about calculating height and zoomlevel"
       ; [now grandfPos speed grandfTime newKarma]
       (calcHeight 100 30 0.4 0 20) => (roughly 3.32)
-      (getZL id 100 0.4) => (roughly 3.32))
+      (getZL id 100 0.4) => (roughly 3.46))
 
     (facts "about cells and position"
       (extremify 4.1) => (roughly 5)

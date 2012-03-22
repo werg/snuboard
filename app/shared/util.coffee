@@ -22,15 +22,15 @@ Math.sgn = (x) ->
 ZOOMBACKOFF = 3
 
 exports.allContainingCells = (content) ->
-	zl = SS.shared.util.calcHeight(0, SS.shared.params.values.globalSpeed, content.onset, content.karma) + ZOOMBACKOFF
+	zl = SS.shared.util.calcHeight(1, SS.shared.params.values.globalSpeed, content.onset, content.karma) + ZOOMBACKOFF
 	xpos = content.xpos
 	ypos = content.ypos
 	cells = []
 	
 	scale = 1
 	for i in [0 .. zl]
-		xcell = Math.extremify xpos/scale
-		ycell = Math.extremify ypos/scale
+		xcell = Math.extremify xpos * scale
+		ycell = Math.extremify ypos * scale
 		cells.push [xcell, ycell, i]
 		scale = scale/2
 		
